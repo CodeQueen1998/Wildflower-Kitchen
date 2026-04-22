@@ -1,284 +1,270 @@
-import os
-
-# Define the HTML content
-html_content = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wildflower Kitchen | Artisan Catering Surfers Paradise</title>
+    <title>Wildflower Kitchen | Premium Catering</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:wght@400;500&display=swap');
+
         :root {
-            --primary: #5d6d54; /* Sage Green */
-            --secondary: #d4a373; /* Earthy Gold */
-            --dark: #333;
-            --light: #fdfbf7;
-            --accent: #e07a5f; /* Terracotta */
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --border-color: #eeeeee;
+            --serif-font: 'Playfair Display', serif;
+            --body-font: 'Lora', serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: var(--light);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--body-font);
             margin: 0;
             padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         header {
-            background-color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 5px solid var(--primary);
+            padding: 40px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
         }
 
         .logo-text {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            letter-spacing: 2px;
-            margin: 0;
+            font-family: var(--serif-font);
+            font-size: 20pt;
+            font-weight: 700;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .tagline {
-            font-style: italic;
-            color: var(--secondary);
-            margin-top: 10px;
+        .sunflower-icon {
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+            opacity: 0.8;
         }
 
         .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 5%;
         }
 
         section {
-            margin: 40px 0;
+            margin-bottom: 80px;
         }
 
         h2 {
-            border-left: 5px solid var(--accent);
-            padding-left: 15px;
-            color: var(--primary);
+            font-family: var(--serif-font);
+            font-size: 18pt;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            padding-bottom: 5px;
         }
 
-        /* Pricing Table */
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin: 20px 0;
+        .intro-text {
+            font-size: 11pt;
+            max-width: 700px;
+            margin-bottom: 50px;
         }
 
-        .price-table th, .price-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .price-table th {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        /* Shipping Logic Box */
-        .logistics-card {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 25px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .badge-local {
-            background: #d1e7dd;
-            color: #0f5132;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .badge-national {
-            background: #cfe2ff;
-            color: #084298;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        /* Photo Grid */
-        .gallery {
+        /* Top Featured Section */
+        .featured-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
-        .gallery-item {
-            background: #eee;
-            border-radius: 8px;
-            overflow: hidden;
+        /* Standard Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .image-item {
             position: relative;
+            overflow: hidden;
         }
 
-        .gallery-item img {
+        .image-item img {
             width: 100%;
-            height: 250px;
+            height: 400px;
             object-fit: cover;
-            display: block;
+            filter: grayscale(10%) contrast(105%);
+            transition: opacity 0.3s ease;
         }
 
-        .gallery-label {
-            padding: 10px;
-            font-size: 0.9rem;
-            text-align: center;
-            background: white;
+        .image-item p {
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+
+        /* Logistics and Pricing */
+        .info-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 60px;
+        }
+
+        .info-block h3 {
+            font-family: var(--serif-font);
+            font-size: 12pt;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .info-block p, .info-block li {
+            font-size: 10pt;
+            margin-bottom: 10px;
+        }
+
+        .pricing-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pricing-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
         }
 
         footer {
+            padding: 60px 5%;
+            border-top: 1px solid var(--border-color);
             text-align: center;
-            padding: 50px;
-            background: var(--primary);
-            color: white;
-            margin-top: 50px;
+            font-size: 9pt;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .btn {
-            background: var(--accent);
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 20px;
+        @media (max-width: 768px) {
+            .featured-grid, .info-section {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-text">🌿 Wildflower Kitchen 🌿</div>
-        <div class="tagline">From Surfers Paradise to Your Doorstep — Australia Wide</div>
+        <div class="logo-container">
+            <span class="logo-text">Wildflower Kitchen</span>
+            <!-- Simple SVG Sunflower Icon -->
+            <svg class="sunflower-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="3" fill="black"/>
+                <path d="M12 2V5M12 19V22M2 12H5M19 12H22M5.64 5.64L7.76 7.76M16.24 16.24L18.36 18.36M5.64 18.36L7.76 16.24M16.24 7.76L18.36 5.64" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 6C10 4 7 4 5 6C3 8 3 11 5 13L12 18L19 13C21 11 21 8 19 6C17 4 14 4 12 6Z" stroke="black" stroke-width="1" opacity="0.3"/>
+            </svg>
+        </div>
     </header>
 
     <div class="container">
         
-        <section id="about">
-            <h2>Artisan Catering for Home & Office</h2>
-            <p>Based in beautiful <strong>Surfers Paradise</strong>, Wildflower Kitchen bridges the gap between home-cooked soul and professional catering. Whether you need a <strong>same-day local meal prep</strong> in QLD or a <strong>curated event package</strong> delivered to Adelaide, we bring the heat and the flavor.</p>
-        </section>
-
-        <section id="pricing">
-            <h2>Catering Packages</h2>
-            <table class="price-table">
-                <thead>
-                    <tr>
-                        <th>Package Name</th>
-                        <th>Includes</th>
-                        <th>Price (AUD)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Office Power Lunch</strong></td>
-                        <td>Lahmacun Flatbreads, Crispy Spring Rolls & Garden Salads</td>
-                        <td>From $25 pp</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Afternoon Tea Social</strong></td>
-                        <td>Fresh Scones, Jam, Cream & Seasonal Fruit</td>
-                        <td>From $18 pp</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Stone-Oven Pizza Party</strong></td>
-                        <td>Artisan Pizzas (Shrimp, Mushroom, Meat) & Garlic Strips</td>
-                        <td>From $22 / pizza</td>
-                    </tr>
-                    <tr>
-                        <td><strong>The Family Roast</strong></td>
-                        <td>Whole Herb-Roasted Chicken & Medley of Vegetables</td>
-                        <td>$85 (feeds 4-6)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Weekly Household Prep</strong></td>
-                        <td>7 Freshly prepped, balanced meals for the week</td>
-                        <td>$110 / week</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section id="logistics">
-            <h2>Shipping & Delivery Logistics</h2>
-            <div class="logistics-card">
-                <h3>📍 Local QLD Households <span class="badge-local">SAME DAY</span></h3>
-                <p>We offer same-day delivery for all meal prep and catering orders within Gold Coast and Brisbane if ordered before 10:00 AM.</p>
-                <ul>
-                    <li><strong>Delivery Fee:</strong> $10 (Free for orders over $100)</li>
-                </ul>
-
-                <hr>
-
-                <h3>🚚 National Shipping (e.g., Surfers Paradise to Adelaide) <span class="badge-national">EXPRESS</span></h3>
-                <p>We use insulated eco-friendly packaging and gel coolants to ship our artisan meals across Australia.</p>
-                <ul>
-                    <li><strong>Transit Time:</strong> 1 - 2 Business Days via Express Courier.</li>
-                    <li><strong>Shipping Rates to Adelaide:</strong> Flat rate of $35 (up to 10kg).</li>
-                    <li><strong>Dispatch Days:</strong> Mon - Wed (to ensure your food never sits in a warehouse over the weekend).</li>
-                </ul>
+        <section>
+            <div class="intro-text">
+                <p>Based in Surfers Paradise, we provide premium artisanal catering to households and businesses across Australia. From local same day delivery in Queensland to carefully handled interstate shipments to Adelaide, our commitment to quality remains unparalleled.</p>
             </div>
-        </section>
 
-        <section id="gallery">
-            <h2>On The Menu</h2>
-            <div class="gallery">
-                <div class="gallery-item">
-                    <img src="Unknown-4.jpeg" alt="Signature Roast Chicken">
-                    <div class="gallery-label">Signature Herb-Roasted Chicken</div>
+            <!-- Top Two Featured Images -->
+            <div class="featured-grid">
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/refs/heads/main/Unknown-4.jpeg" alt="Signature Roast">
+                    <p>The Signature Harvest Roast</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="Unknown-2.jpeg" alt="Stone Oven Pizza">
-                    <div class="gallery-label">Stone-Oven Artisan Pizzas</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="Unknown-9.jpeg" alt="Afternoon Tea Scones">
-                    <div class="gallery-label">Classic Scones with Jam & Cream</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="Unknown-1.jpeg" alt="Artisan Flatbreads">
-                    <div class="gallery-label">Mediterranean Flatbreads (Lahmacun)</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="Unknown-7.jpeg" alt="Spring Rolls">
-                    <div class="gallery-label">Crispy Handmade Spring Rolls</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="Unknown-3.jpeg" alt="Fresh Garden Salad">
-                    <div class="gallery-label">Garden Fresh Side Salads</div>
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/refs/heads/main/Unknown-2.jpeg" alt="Stone Oven Pizza">
+                    <p>Stone Oven Artisan Pizza</p>
                 </div>
             </div>
         </section>
 
-        <section style="text-align: center;">
-            <a href="mailto:hello@wildflowerkitchen.com.au" class="btn">Place Your Order Now</a>
+        <!-- Mediterranean and Turkish Section -->
+        <section>
+            <h2>Mediterranean and Turkish Style Cuisine</h2>
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/refs/heads/main/Unknown-1.jpeg" alt="Lahmacun">
+                    <p>Hand-Crafted Lahmacun</p>
+                </div>
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/refs/heads/main/Unknown-6.jpeg" alt="Turkish Specialty">
+                    <p>Traditional Turkish Manti</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vegan and Organic Section -->
+        <section>
+            <h2>Vegan and Organic</h2>
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/main/Unknown-3.jpeg" alt="Organic Salad">
+                    <p>Seasonal Organic Garden Bowl</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patisserie and Small Plates -->
+        <section>
+            <h2>Patisserie and Small Plates</h2>
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/refs/heads/main/Unknown-9.jpeg" alt="Scones">
+                    <p>Classic Devonian Scones</p>
+                </div>
+                <div class="image-item">
+                    <img src="https://raw.githubusercontent.com/CodeQueen1998/Wildflower-Kitchen/refs/heads/main/Unknown-5.jpeg" alt="Prosciutto">
+                    <p>Aged Prosciutto and Buffalo Mozzarella</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Information Section -->
+        <section class="info-section">
+            <div class="info-block">
+                <h3>Delivery and Logistics</h3>
+                <p><strong>Queensland Households</strong><br>Same day delivery available for all meal prep orders placed before 10 am.</p>
+                <p><strong>National Catering (Adelaide and Beyond)</strong><br>We ship via express refrigerated couriers. Shipping to Adelaide typically takes 1 to 2 business days. Shipping rates are calculated based on weight and destination at checkout.</p>
+            </div>
+            <div class="info-block">
+                <h3>Catering Packages</h3>
+                <div class="pricing-list">
+                    <div class="pricing-item"><span>The Corporate Lunch</span> <span>From $25 pp</span></div>
+                    <div class="pricing-item"><span>Afternoon Tea Selection</span> <span>From $18 pp</span></div>
+                    <div class="pricing-item"><span>The Family Roast (Feeds 6)</span> <span>$85</span></div>
+                    <div class="pricing-item"><span>Weekly Meal Prep (7 Meals)</span> <span>$110</span></div>
+                </div>
+            </div>
         </section>
 
     </div>
 
     <footer>
-        <p>&copy; 2024 Wildflower Kitchen. Surfers Paradise, QLD.</p>
-        <p>Serving Businesses & Households Nationwide.</p>
+        Wildflower Kitchen &copy; 2024 — Surfers Paradise, Australia
     </footer>
 
 </body>
 </html>
-"""
-
-# Write to file
-with open("index.html", "w") as f:
-    f.write(html_content)
